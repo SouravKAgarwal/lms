@@ -27,8 +27,6 @@ const CourseDetailsPage = ({ id }) => {
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
-  console.log(data);
-
   useEffect(() => {
     if (key) {
       const publishableKey = key.stripePublishableKey;
@@ -56,6 +54,8 @@ const CourseDetailsPage = ({ id }) => {
       setUser(userData.user);
     }
   }, [userData]);
+
+  console.log(data,courseData);
 
   return (
     <>
