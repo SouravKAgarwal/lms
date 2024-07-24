@@ -32,7 +32,7 @@ const Hero = () => {
               <Image
                 width={1000}
                 height={1000}
-                src={data.layout.banner.image.url}
+                src={data?.layout.banner.image.url}
                 alt="banner"
                 className="w-[80%] lg:w-full h-auto object-contain object-center z-[9900000]"
                 priority
@@ -40,10 +40,10 @@ const Hero = () => {
             </div>
             <div className="w-full md:w-3/5 lg:w-2/3 p-4 mt-10 md:mt-0">
               <h1 className="text-4xl font-bold tracking-tight capitalize">
-                {data.layout.banner.title}
+                {data?.layout.banner.title}
               </h1>
               <p className="mt-6 text-base leading-8 text-gray-400 dark:text-gray-500">
-                {data.layout.banner.subTitle}
+                {data?.layout.banner.subTitle}
               </p>
               <div className="w-full relative mt-10 flex gap-x-6">
                 <Input

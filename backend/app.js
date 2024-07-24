@@ -43,5 +43,5 @@ app.all("*", (req, res, next) => {
   next(err);
 });
 
-app.use(errorMiddleware);
 app.use(limiter);
+app.use(errorMiddleware);

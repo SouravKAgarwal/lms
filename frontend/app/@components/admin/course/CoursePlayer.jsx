@@ -13,7 +13,7 @@ const CoursePlayer = ({ videoUrl }) => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:8000/api/v1/courses/video`,
+          `https://lms-2uou.onrender.com/api/v1/courses/video`,
           { videoId: videoUrl }
         );
         setVideoData(response.data);
