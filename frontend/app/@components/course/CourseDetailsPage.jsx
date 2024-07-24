@@ -52,8 +52,6 @@ const CourseDetailsPage = ({ id }) => {
     }
   }, [userData]);
 
-  console.log(data);
-
   return (
     <>
       {isLoading ? (
