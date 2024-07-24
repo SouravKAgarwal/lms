@@ -36,7 +36,7 @@ const CourseDetailsPage = ({ id }) => {
     if(courseData){
       setData(courseData.course);
     }
-    if (data && user) {
+    if (courseData && user) {
       const amount = Math.round(courseData.course.price) * 100;
       orderPayment(amount);
     } else {
