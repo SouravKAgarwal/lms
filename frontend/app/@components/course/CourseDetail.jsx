@@ -113,20 +113,20 @@ const CourseDetail = ({ data, clientSecret, stripePromise }) => {
                 <div className="w-full pb-4" key={index}>
                   <div className="flex">
                     <Image
-                      src={i.user.avatar ? i.user.avatar.url : "/profile.png"}
+                      src={i?.user?.avatar ? i?.user?.avatar?.url : "/profile.png"}
                       className="w-[50px] h-[50px] rounded-full bg-black dark:bg-white"
-                      alt={i.user.name}
+                      alt={i?.user?.name}
                       width={1000}
                       height={1000}
                     />
                     <div className="hidden md:block pl-2">
                       <div className="flex items-center">
-                        <h5 className="pr-2">{i.user.name}</h5>
-                        <Ratings rating={i.rating} />
+                        <h5 className="pr-2">{i?.user?.name}</h5>
+                        <Ratings rating={i?.rating} />
                       </div>
-                      <p>{i.comment}</p>
+                      <p>{i?.comment}</p>
                       <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                        {moment(i.createdAt).fromNow()}
+                        {moment(i?.createdAt).fromNow()}
                       </small>
                     </div>
                     <div className="pl-2 flex md:hidden items-center">
