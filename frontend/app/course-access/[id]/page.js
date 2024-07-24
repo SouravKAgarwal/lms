@@ -29,7 +29,7 @@ const Page = ({ params }) => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="mt-20">
+        <div className="mt-20 min-h-screen">
           <CourseContent id={id} user={data && data.user} />
         </div>
       )}
