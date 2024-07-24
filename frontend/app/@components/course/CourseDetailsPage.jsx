@@ -13,7 +13,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
 
 const CourseDetailsPage = ({ id }) => {
-  const { data, isLoading } = useGetCourseDetailsQuery(id);
+  const { data: courseData, isLoading } = useGetCourseDetailsQuery(id);
   const { data: userData, refetch } = useLoadUserQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -23,6 +23,8 @@ const CourseDetailsPage = ({ id }) => {
 
   const [orderPayment, { data: paymentData }] = useOrderPaymentMutation();
 
+  const [data,setData] = useState();
+
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
@@ -31,13 +33,16 @@ const CourseDetailsPage = ({ id }) => {
       const publishableKey = key.stripePublishableKey;
       setStripePromise(loadStripe(publishableKey));
     }
+    if(courseData){
+      setData(courseData.course);
+    }
     if (data && user) {
-      const amount = Math.round(data.course.price) * 100;
+      const amount = Math.round(courseData.course.price) * 100;
       orderPayment(amount);
     } else {
       refetch();
     }
-  }, [data, key, user]);
+  }, [courseData, key, user]);
 
   useEffect(() => {
     if (paymentData) {
@@ -58,15 +63,15 @@ const CourseDetailsPage = ({ id }) => {
       ) : (
         <div>
           <Heading
-            title={`${data.course.name} - ELearning`}
+            title={`${data.name} - ELearning`}
             description="Platform for learning new technologies and programming."
-            keywords={data.course.tags}
+            keywords={data.tags}
           />
           <Header activeItem={activeItem} setActiveItem={setActiveItem} />
           <div className="mt-20">
             {stripePromise && (
               <CourseDetail
-                data={data?.course}
+                data={data}
                 stripePromise={stripePromise}
                 clientSecret={clientSecret}
               />
