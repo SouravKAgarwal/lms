@@ -28,20 +28,23 @@ const CourseDetailsPage = ({ id }) => {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
+    if(courseData){
+      setData(courseData.course);
+    }
+  },[courseData])
+
+  useEffect(() => {
     if (key) {
       const publishableKey = key.stripePublishableKey;
       setStripePromise(loadStripe(publishableKey));
     }
-    if(courseData){
-      setData(courseData.course);
-    }
-    if (courseData && user) {
-      const amount = Math.round(courseData.course.price) * 100;
+    if (data && user) {
+      const amount = Math.round(data.price) * 100;
       orderPayment(amount);
     } else {
       refetch();
     }
-  }, [courseData, key, user]);
+  }, [data, key, user]);
 
   useEffect(() => {
     if (paymentData) {
