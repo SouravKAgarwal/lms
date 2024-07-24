@@ -95,6 +95,7 @@ const EditFaq = () => {
                       handleQuestionChange(q._id, e.target.value)
                     }
                     placeholder="Add your question...."
+                    autoComplete="off"
                   />
                   <span className="ml-6 flex shrink-0">
                     {q.active ? (
@@ -113,6 +114,7 @@ const EditFaq = () => {
                     onChange={(e) => handleAnswerChange(q._id, e.target.value)}
                     placeholder="Add your answer...."
                     rows={3}
+                    autoComplete="off"
                   />
                   <span className="mt-6 flex shrink-0">
                     <AiOutlineDelete

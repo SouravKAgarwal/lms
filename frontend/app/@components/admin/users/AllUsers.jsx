@@ -141,7 +141,7 @@ const AllUsers = ({ isTeam }) => {
   }
 
   return (
-    <div className="mt-[120px]">
+    <div className="mt-28">
       {isLoading ? (
         <Loading />
       ) : (

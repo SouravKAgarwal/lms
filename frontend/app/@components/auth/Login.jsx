@@ -27,7 +27,7 @@ const schema = Yup.object().shape({
     .min(6, "Password must be atleast 6 characters!"),
 });
 
-const Login = ({ login, setLogin, setRegister }) => {
+const Login = ({ login, setLogin, setRegister, refetch }) => {
   const [visible, setVisible] = useState(false);
   const [loginUser, { isSuccess, error, isLoading }] = useLoginUserMutation();
 
@@ -43,14 +43,10 @@ const Login = ({ login, setLogin, setRegister }) => {
     if (isSuccess) {
       toast.success("Login successfully");
       setLogin(false);
+      refetch();
     }
     if (error) {
-      if ("data" in error) {
-        const errorData = error;
-        toast.error(errorData.data.message);
-      } else {
-        console.log("An error occured", error);
-      }
+      toast.error(error.data.message);
     }
   }, [isSuccess, error]);
 
@@ -88,6 +84,7 @@ const Login = ({ login, setLogin, setRegister }) => {
                     value={values.email}
                     onChange={handleChange}
                     placeholder="john@doe.com"
+                    autoComplete="off"
                   />
                   {errors.email && touched.email && (
                     <span className="text-red-500 pt-2 block">
@@ -110,6 +107,7 @@ const Login = ({ login, setLogin, setRegister }) => {
                     value={values.password}
                     onChange={handleChange}
                     placeholder="Enter password"
+                    autoComplete="off"
                   />
                   <div
                     className={`absolute right-3 transform -translate-y-1/2 cursor-pointer ${

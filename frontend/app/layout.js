@@ -8,6 +8,11 @@ import { Toaster } from "sonner";
 import { SessionProvider } from "next-auth/react";
 import { useLoadUserQuery } from "../redux/features/api/apiSlices";
 import Loading from "./@components/Loading";
+import socketIO from "socket.io-client";
+import { useEffect } from "react";
+
+const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
+const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -30,7 +35,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <SessionProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <Layout>{children}</Layout>
+              <Layout children={children}></Layout>
               <Toaster position="top-center" />
             </ThemeProvider>
           </SessionProvider>
@@ -42,6 +47,10 @@ export default function RootLayout({ children }) {
 
 const Layout = ({ children }) => {
   const { isLoading } = useLoadUserQuery();
+
+  useEffect(() => {
+    socketId.on("connection", () => {});
+  }, [socketId]);
 
   return <>{isLoading ? <Loading /> : <>{children}</>}</>;
 };

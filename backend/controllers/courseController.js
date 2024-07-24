@@ -78,9 +78,18 @@ export const getSingleCourse = catchAsyncError(async (req, res, next) => {
   try {
     const courseId = req.params.id;
 
-    const course = await Course.findById(courseId).select(
-      "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
-    );
+    const course = await Course.findById(courseId)
+      .select(
+        "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+      )
+      .populate({
+        path: "reviews.user",
+        select: "name email avatar role",
+      })
+      .populate({
+        path: "reviews.commentReplies.user",
+        select: "name email avatar role",
+      });
 
     res.status(200).json({
       success: true,
@@ -111,7 +120,9 @@ export const getCourseByUser = catchAsyncError(async (req, res, next) => {
     const userCourseList = req.user?.courses;
     const courseId = req.params.id;
 
-    const courseExists = userCourseList?.find((course) => course === courseId);
+    const courseExists =
+      userCourseList?.find((course) => course === courseId) ||
+      req.user.role === "admin";
 
     if (!courseExists) {
       return next(
@@ -119,12 +130,27 @@ export const getCourseByUser = catchAsyncError(async (req, res, next) => {
       );
     }
 
-    const course = await Course.findById(courseId);
-    const content = course.courseData;
+    const course = await Course.findById(courseId)
+      .populate({
+        path: "courseData.questions.user",
+        select: "name email avatar role",
+      })
+      .populate({
+        path: "courseData.questions.questionReplies.user",
+        select: "name email avatar role",
+      })
+      .populate({
+        path: "reviews.user",
+        select: "name email avatar role",
+      })
+      .populate({
+        path: "reviews.commentReplies.user",
+        select: "name email avatar role",
+      });
 
     res.status(200).json({
       success: true,
-      content,
+      course,
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
@@ -147,7 +173,7 @@ export const addQuestions = catchAsyncError(async (req, res, next) => {
     }
 
     const newQuestion = {
-      user: req.user,
+      user: req.user._id,
       question,
       questionReplies: [],
     };
@@ -174,7 +200,15 @@ export const addAnswer = catchAsyncError(async (req, res, next) => {
   try {
     const { answer, courseId, contentId, questionId } = req.body;
 
-    const course = await Course.findById(courseId);
+    const course = await Course.findById(courseId)
+      .populate({
+        path: "courseData.questions.user",
+        select: "name email avatar role",
+      })
+      .populate({
+        path: "courseData.questions.questionReplies.user",
+        select: "name email avatar role",
+      });
 
     if (!mongoose.Types.ObjectId.isValid(contentId)) {
       return next(new ErrorHandler("Invalid content ID", 400));
@@ -195,18 +229,19 @@ export const addAnswer = catchAsyncError(async (req, res, next) => {
     }
 
     const newAnswer = {
-      user: req.user,
+      user: req.user._id,
       answer,
+      createdAt: new Date().toISOString(),
     };
 
     question.questionReplies.push(newAnswer);
     await course.save();
 
-    if (req.user._id === question.user._id) {
+    if (req.user._id === question.user) {
       await Notification.create({
         userId: req.user._id,
         title: "New Question Reply",
-        message: `question Replied for ${courseContent.title}`,
+        message: `Question replied for ${courseContent.title}`,
       });
     } else {
       const data = {
@@ -249,7 +284,7 @@ export const addReview = catchAsyncError(async (req, res, next) => {
     const { review, rating } = req.body;
 
     const reviewData = {
-      user: req.user,
+      user: req.user._id,
       comment: review,
       rating,
     };
@@ -264,7 +299,7 @@ export const addReview = catchAsyncError(async (req, res, next) => {
 
     await Notification.create({
       userId: req.user._id,
-      title: "New Review Recieved",
+      title: "New Review Received",
       message: `${req.user.name} has given a review on ${course.name}`,
     });
 
@@ -282,6 +317,7 @@ export const addReplyToReview = catchAsyncError(async (req, res, next) => {
     const { comment, courseId, reviewId } = req.body;
 
     const course = await Course.findById(courseId);
+
     if (!course) return next(new ErrorHandler("Course not found", 400));
 
     const review = course.reviews.find(
@@ -290,8 +326,9 @@ export const addReplyToReview = catchAsyncError(async (req, res, next) => {
     if (!review) return next(new ErrorHandler("Review not found", 400));
 
     const replyData = {
-      user: req.user,
+      user: req.user._id,
       comment,
+      createdAt: new Date().toISOString(),
     };
 
     if (!review.commentReplies) review.commentReplies = [];

@@ -8,7 +8,9 @@ const DashboardHero = ({ isDashboard }) => {
   return (
     <div>
       <DashboardHeader open={open} />
-      {isDashboard && <DashboardWidgets open={open} value={""} />}
+      <div className="mt-24">
+        {isDashboard && <DashboardWidgets open={open} value={""} />}
+      </div>
     </div>
   );
 };

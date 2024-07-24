@@ -8,28 +8,35 @@ import ThemesSwitcher from "./ThemesSwitcher";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Verification from "./auth/Verification";
-import { useSelector } from "react-redux";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import {
   useLogoutQuery,
   useSocialAuthMutation,
-} from "../../redux/features/auth/authApi";
+} from "@/redux/features/auth/authApi";
 import { toast } from "sonner";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlices";
 
 const Header = ({ activeItem, setActiveItem }) => {
-  const { user } = useSelector((state) => state.auth);
+  const {
+    data: userData,
+    isLoading,
+    refetch,
+  } = useLoadUserQuery(undefined, { refetchOnMountOrArgChange: true });
+  const [data, setData] = useState();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [login, setLogin] = useState(false);
   const [register, setRegister] = useState(false);
   const [verification, setVerification] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { data } = useSession();
+  const { data: sessionData } = useSession();
   const [socialAuth, { isSuccess }] = useSocialAuthMutation();
   const [userLogout, setUserLogout] = useState(false);
   const {} = useLogoutQuery(undefined, {
     skip: !userLogout ? true : false,
   });
+
+  const user = userData?.user;
 
   const navigation = [
     { name: "Home", href: "/" },
@@ -39,28 +46,35 @@ const Header = ({ activeItem, setActiveItem }) => {
   ];
 
   useEffect(() => {
-    if (!user) {
-      if (data) {
-        socialAuth({
-          email: data?.user?.email,
-          avatar: data?.user?.image,
-          name: data?.user?.name,
-        });
-      }
+    if (sessionData) {
+      setData(sessionData);
+    }
+  }, [sessionData]);
+
+  useEffect(() => {
+    if (!isLoading && !user && data) {
+      socialAuth({
+        email: data?.user?.email,
+        avatar: data?.user?.image,
+        name: data?.user?.name,
+      });
     }
 
-    if (data === null) {
-      if (isSuccess) toast.success("Login successful");
-    }
-
-    if (data === null) {
+    if (data === null && !isLoading) {
       if (user) {
         setUserLogout(false);
-        return;
+      } else {
+        setUserLogout(true);
       }
-      setUserLogout(true);
     }
-  }, [data, user]);
+  }, [data, user, isLoading]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Login successful");
+      refetch();
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     setMounted(true);
@@ -68,12 +82,11 @@ const Header = ({ activeItem, setActiveItem }) => {
 
   const handleSetActiveItem = (index) => {
     setActiveItem(index);
-    localStorage.setItem("activeItem", index);
   };
 
   return (
-    <header className="z-50">
-      <nav className="flex items-center justify-between p-4 lg:px-8">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      <nav className="flex items-center justify-between p-4 lg:px-8 dark:bg-[#111726] bg-white">
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
             <img className="h-12 w-auto" src="/logo.png" alt="logo" />
@@ -164,7 +177,7 @@ const Header = ({ activeItem, setActiveItem }) => {
                       activeItem === index
                         ? "dark:text-[#37a39a] text-[crimson]"
                         : "dark:text-white text-black"
-                    } hover:bg-gray-50`}
+                    } hover:bg-gray-50 dark:hover:bg-slate-500`}
                     onClick={() => handleSetActiveItem(index)}
                   >
                     {item.name}
@@ -205,9 +218,13 @@ const Header = ({ activeItem, setActiveItem }) => {
           </div>
         </DialogPanel>
       </Dialog>
-
       {login && <div className="fixed inset-0 z-40 bg-black bg-opacity-70" />}
-      <Login login={login} setLogin={setLogin} setRegister={setRegister} />
+      <Login
+        login={login}
+        setLogin={setLogin}
+        setRegister={setRegister}
+        refetch={refetch}
+      />
       {register && (
         <div className="fixed inset-0 z-40 bg-black bg-opacity-70" />
       )}

@@ -80,6 +80,7 @@ const CourseData = ({
                 placeholder="You will be able to ...."
                 value={benefit.title}
                 onChange={(e) => handleBenefitChange(index, e.target.value)}
+                autoComplete="off"
                 required
               />
               <AiOutlineDelete
@@ -110,6 +111,7 @@ const CourseData = ({
                 onChange={(e) =>
                   handlePrerequisitiesChange(index, e.target.value)
                 }
+                autoComplete="off"
                 required
               />
               <AiOutlineDelete

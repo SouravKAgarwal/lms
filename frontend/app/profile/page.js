@@ -5,7 +5,7 @@ import Heading from "../@utils/Heading";
 import Profile from "../@components/profile/Profile";
 import { useSelector } from "react-redux";
 import Header from "../@components/Header";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Page = () => {
   const { user } = useSelector((state) => state.auth);

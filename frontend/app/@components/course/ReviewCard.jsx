@@ -15,28 +15,20 @@ const ReviewCard = ({ review }) => {
         />
         <div className="md:flex justify-between w-full hidden">
           <div className="pl-4">
-            <h5 className="text-xl text-black dark:text-white">
-              {review.name}
-            </h5>
-            <h6 className="text-sm text-black dark:text-white">
-              {review.profession}
-            </h6>
+            <h5 className="text-xl">{review.name}</h5>
+            <h6 className="text-sm">{review.profession}</h6>
           </div>
           <Ratings rating={review.rating} />
         </div>
         <div className="flex flex-col justify-between w-full md:hidden">
           <div className="pl-4">
-            <h5 className="text-xl text-black dark:text-white">
-              {review.name}
-            </h5>
-            <h6 className="text-sm text-black dark:text-white">
-              {review.profession}
-            </h6>
+            <h5 className="text-xl">{review.name}</h5>
+            <h6 className="text-sm">{review.profession}</h6>
           </div>
           <Ratings rating={review.rating} />
         </div>
       </div>
-      <p className="pt-2 px-2 font-Poppins text-black dark:text-white">
+      <p className="pt-2 px-2 font-Poppins text-gray-500 dark:text-gray-300 text-[14px]">
         {review.comment}
       </p>
     </div>

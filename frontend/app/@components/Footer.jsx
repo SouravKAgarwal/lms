@@ -9,11 +9,6 @@ const Footer = () => {
         </span>
         <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
           <li>
-            <Link href="/" className="me-4 md:me-6">
-              Home
-            </Link>
-          </li>
-          <li>
             <Link href="/about" className="me-4 md:me-6">
               About
             </Link>
@@ -21,6 +16,11 @@ const Footer = () => {
           <li>
             <Link href="/privacy" className="me-4 md:me-6">
               Privacy Policy
+            </Link>
+          </li>
+          <li>
+            <Link href="/faq" className="me-4 md:me-6">
+              FAQ
             </Link>
           </li>
           <li>

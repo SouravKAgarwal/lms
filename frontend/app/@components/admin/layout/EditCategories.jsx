@@ -88,6 +88,7 @@ const EditCategories = () => {
                   value={c.title}
                   onChange={(e) => handleCategoryChange(c._id, e.target.value)}
                   placeholder="Enter category title..."
+                  autoComplete="off"
                 />
                 <AiOutlineDelete
                   className="dark:text-white text-black text-base cursor-pointer"

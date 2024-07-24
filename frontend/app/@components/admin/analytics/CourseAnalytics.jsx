@@ -1,4 +1,4 @@
-import { useGetCoursesAnalyticsQuery } from "../../../../redux/analytics/analyticsApi";
+import { useGetCoursesAnalyticsQuery } from "../../../../redux/features/analytics/analyticsApi";
 import {
   BarChart,
   Bar,

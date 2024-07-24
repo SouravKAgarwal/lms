@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import { useRegisterMutation } from "../../../redux/features/auth/authApi";
 import { toast } from "sonner";
 import Loading from "../Loading";
+import { signIn } from "next-auth/react";
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Please enter your name!"),
@@ -40,10 +41,7 @@ const Register = ({ registered, setLogin, setRegister, setVerification }) => {
       setVerification(true);
     }
     if (error) {
-      if ("data" in error) {
-        const errorData = error;
-        toast.error(errorData.data.message);
-      }
+      toast.error(error.data.message);
     }
   }, [isSuccess, error]);
 
@@ -93,6 +91,7 @@ const Register = ({ registered, setLogin, setRegister, setVerification }) => {
                     value={values.name}
                     onChange={handleChange}
                     placeholder="John Doe"
+                    autoComplete="off"
                   />
                   {errors.name && touched.name && (
                     <span className="text-red-500 pt-2 block">
@@ -115,6 +114,7 @@ const Register = ({ registered, setLogin, setRegister, setVerification }) => {
                     value={values.email}
                     onChange={handleChange}
                     placeholder="john@doe.com"
+                    autoComplete="off"
                   />
                   {errors.email && touched.email && (
                     <span className="text-red-500 pt-2 block">
@@ -137,6 +137,7 @@ const Register = ({ registered, setLogin, setRegister, setVerification }) => {
                     value={values.password}
                     onChange={handleChange}
                     placeholder="Enter password"
+                    autoComplete="off"
                   />
                   <div
                     className={`absolute right-3 transform -translate-y-1/2 cursor-pointer ${
@@ -175,10 +176,15 @@ const Register = ({ registered, setLogin, setRegister, setVerification }) => {
               <div className="w-full border h-1/4 border-gray-300 dark:border-gray-500" />
             </div>
             <div className="flex items-center justify-center my-3 gap-4">
-              <FcGoogle size={30} className="cursor-pointer" />
+              <FcGoogle
+                size={30}
+                className="cursor-pointer"
+                onClick={() => signIn("google")}
+              />
               <AiFillGithub
                 size={30}
                 className="cursor-pointer text-black dark:text-white"
+                onClick={() => signIn("github")}
               />
             </div>
 

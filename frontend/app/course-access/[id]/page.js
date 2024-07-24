@@ -12,7 +12,9 @@ const Page = ({ params }) => {
 
   useEffect(() => {
     if (data) {
-      const isPurchased = data.user.courses.find((item) => item === id);
+      const isPurchased =
+        data.user.courses.find((item) => item === id) ||
+        data.user.role === "admin";
       if (!isPurchased) {
         redirect("/");
       }
@@ -27,8 +29,8 @@ const Page = ({ params }) => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div>
-          <CourseContent id={id} />
+        <div className="mt-20">
+          <CourseContent id={id} user={data && data.user} />
         </div>
       )}
     </>

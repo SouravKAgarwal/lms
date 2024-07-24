@@ -1,6 +1,6 @@
 "use client";
 
-import CourseDetailsPage from "../../@components/course/CourseDetailsPage";
+import CourseDetailsPage from "@/app/@components/course/CourseDetailsPage";
 
 const Page = ({ params }) => {
   return (

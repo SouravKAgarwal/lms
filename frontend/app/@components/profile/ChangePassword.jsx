@@ -64,6 +64,7 @@ const ChangePassword = () => {
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
                 placeholder="Enter old password"
+                autoComplete="off"
               />
               <div
                 className={`absolute top-2/4 right-3 transform translate-y-1/3 cursor-pointer`}
@@ -87,6 +88,7 @@ const ChangePassword = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Enter new password"
+                autoComplete="off"
               />
               <div
                 className={`absolute top-2/4 right-3 transform translate-y-1/3 cursor-pointer`}
@@ -110,6 +112,7 @@ const ChangePassword = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Enter confirm password"
+                autoComplete="off"
               />
               <div
                 className={`absolute top-2/4 right-3 transform translate-y-1/3 cursor-pointer`}

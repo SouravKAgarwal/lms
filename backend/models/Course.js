@@ -1,11 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
-    user: Object,
+    user: { type: Schema.Types.ObjectId, ref: "User" },
     rating: { type: Number, default: 0 },
     comment: String,
-    commentReplies: [Object],
+    commentReplies: [
+      {
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        comment: String,
+        createdAt: Date,
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -15,11 +21,22 @@ const linkSchema = new mongoose.Schema({
   url: String,
 });
 
-const questionSchema = new mongoose.Schema({
-  user: Object,
-  question: String,
-  questionReplies: [Object],
-});
+const questionSchema = new mongoose.Schema(
+  {
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+    question: String,
+    questionReplies: [
+      {
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        answer: String,
+        createdAt: Date,
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const courseDataSchema = new mongoose.Schema({
   videoUrl: String,

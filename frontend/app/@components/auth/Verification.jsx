@@ -99,6 +99,7 @@ const Verification = ({ verification, setVerification, setLogin }) => {
                   maxLength={1}
                   value={verifyNumber[key]}
                   onChange={(e) => handleInputChange(index, e.target.value)}
+                  autoComplete="off"
                 />
               ))}
             </div>

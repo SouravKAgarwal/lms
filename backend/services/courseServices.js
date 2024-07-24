@@ -10,7 +10,24 @@ export const createCourse = catchAsyncError(async (data, res) => {
 });
 
 export const allCourses = async (res) => {
-  const courses = await Course.find().sort({ createdAt: -1 });
+  const courses = await Course.find()
+    .sort({ createdAt: -1 })
+    .populate({
+      path: "courseData.questions.user",
+      select: "name email avatar role",
+    })
+    .populate({
+      path: "courseData.questions.questionReplies.user",
+      select: "name email avatar role",
+    })
+    .populate({
+      path: "reviews.user",
+      select: "name email avatar role",
+    })
+    .populate({
+      path: "reviews.commentReplies.user",
+      select: "name email avatar role",
+    });
 
   res.status(201).json({
     success: true,

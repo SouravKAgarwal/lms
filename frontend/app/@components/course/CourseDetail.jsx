@@ -1,29 +1,48 @@
 import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
 import Ratings from "../../@utils/Ratings";
-import { useSelector } from "react-redux";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlices";
 import moment from "moment";
 import CoursePlayer from "../admin/course/CoursePlayer";
 import CourseContentList from "./CourseContentList.jsx";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../../@components/order/CheckoutForm";
-import { useLoadUserQuery } from "@/redux/features/api/apiSlices";
+import Image from "next/image";
+import Login from "../auth/Login";
+import Register from "../auth/Register";
+import Verification from "../auth/Verification";
 
 const CourseDetail = ({ data, clientSecret, stripePromise }) => {
-  const { data: userData } = useLoadUserQuery(undefined, {});
-  const { user } = userData;
+  const { data: userData, refetch } = useLoadUserQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [user, setUser] = useState();
+  const [login, setLogin] = useState(false);
+  const [register, setRegister] = useState(false);
+  const [verification, setVerification] = useState(false);
   const [open, setOpen] = useState(false);
 
   const discount =
     ((data.estimatedPrice - data.price) / data.estimatedPrice) * 100;
   const discountPercentage = discount.toFixed(0);
 
-  const isPurchased = user && user.courses.find((i) => i === data._id);
+  const isPurchased =
+    user && (user.courses.find((i) => i === data._id) || user.role === "admin");
 
   const handleOrder = () => {
-    setOpen(true);
+    if (user) {
+      setOpen(true);
+    } else {
+      setLogin(true);
+    }
   };
+
+  useEffect(() => {
+    if (userData) {
+      setUser(userData.user);
+    }
+  }, [userData]);
 
   return (
     <div>
@@ -77,7 +96,7 @@ const CourseDetail = ({ data, clientSecret, stripePromise }) => {
               </p>
             </div>
             <div className="w-full mt-8">
-              <div className="md:flex items-center mb-4">
+              <div className="flex items-center mb-4">
                 <h1 className="text-xl font-Poppins font-[600]">
                   Course Ratings
                 </h1>
@@ -93,13 +112,13 @@ const CourseDetail = ({ data, clientSecret, stripePromise }) => {
               {(data.reviews && [...data.reviews].reverse()).map((i, index) => (
                 <div className="w-full pb-4" key={index}>
                   <div className="flex">
-                    <div className="w-[50px] h-[50px]">
-                      <div className="w-[50px] h-[50px] bg-slate-600 rounded-[50px] flex items-center justify-center cursor-pointer">
-                        <h1 className="uppercase text-lg text-white">
-                          {i.user.name.slice(0, 2)}
-                        </h1>
-                      </div>
-                    </div>
+                    <Image
+                      src={i.user.avatar ? i.user.avatar.url : "/profile.png"}
+                      className="w-[50px] h-[50px] rounded-full bg-black dark:bg-white"
+                      alt={i.user.name}
+                      width={1000}
+                      height={1000}
+                    />
                     <div className="hidden md:block pl-2">
                       <div className="flex items-center">
                         <h5 className="pr-2">{i.user.name}</h5>
@@ -121,7 +140,7 @@ const CourseDetail = ({ data, clientSecret, stripePromise }) => {
           </div>
           <div className="w-full md:w-[40%] relative">
             <div className="w-full">
-              <CoursePlayer videoUrl={data.demoUrl} title={data.name} />
+              <CoursePlayer videoUrl={data.demoUrl} />
               <div className="flex items-center mt-4">
                 <h1 className="text-2xl">
                   {data.price === 0 ? "FREE" : "$" + data.price}
@@ -137,13 +156,13 @@ const CourseDetail = ({ data, clientSecret, stripePromise }) => {
                 {isPurchased ? (
                   <Link
                     href={`/course-access/${data._id}`}
-                    className="w-full flex items-center justify-center md:w-[150px] mt-3 py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[crimson] cursor-pointer focus:outline-none"
+                    className="flex items-center justify-center w-[150px] mt-3 py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[crimson] cursor-pointer focus:outline-none"
                   >
                     Enter to Course
                   </Link>
                 ) : (
                   <div
-                    className="w-full flex items-center justify-center md:w-[150px] mt-3 py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[crimson] cursor-pointer focus:outline-none"
+                    className="flex items-center justify-center w-[150px] mt-3 py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[crimson] cursor-pointer focus:outline-none"
                     onClick={handleOrder}
                   >
                     Buy Now ${data.price}
@@ -159,7 +178,7 @@ const CourseDetail = ({ data, clientSecret, stripePromise }) => {
               <p className="pt-1 font-Poppins font-medium text-base">
                 &#x2022;Cerificate of completion
               </p>
-              <p className="pt-1 font-Poppins font-medium text-base">
+              <p className="pt-1 pb-5 font-Poppins font-medium text-base">
                 &#x2022;Premium Support
               </p>
             </div>
@@ -180,13 +199,37 @@ const CourseDetail = ({ data, clientSecret, stripePromise }) => {
               <div className="w-full">
                 {stripePromise && clientSecret && (
                   <Elements stripe={stripePromise} options={{ clientSecret }}>
-                    <CheckoutForm setOpen={setOpen} data={data} />
+                    <CheckoutForm setOpen={setOpen} data={data} user={user} />
                   </Elements>
                 )}
               </div>
             </div>
           </div>
         )}
+        {login && <div className="fixed inset-0 z-50 bg-black bg-opacity-70" />}
+        <Login
+          login={login}
+          setLogin={setLogin}
+          setRegister={setRegister}
+          refetch={refetch}
+        />
+        {register && (
+          <div className="fixed inset-0 z-40 bg-black bg-opacity-70" />
+        )}
+        <Register
+          setLogin={setLogin}
+          setRegister={setRegister}
+          registered={register}
+          setVerification={setVerification}
+        />
+        {verification && (
+          <div className="fixed inset-0 z-40 bg-black bg-opacity-70" />
+        )}
+        <Verification
+          verification={verification}
+          setVerification={setVerification}
+          setLogin={setLogin}
+        />
       </>
     </div>
   );

@@ -49,6 +49,7 @@ input[type="number"] {
 
 body {
   color: rgb(var(--foreground-rgb));
+  user-select: none;
 }
 
 @layer utilities {

@@ -1,4 +1,4 @@
-import { useGetOrdersAnalyticsQuery } from "../../../../redux/analytics/analyticsApi";
+import { useGetOrdersAnalyticsQuery } from "../../../../redux/features/analytics/analyticsApi";
 import {
   ResponsiveContainer,
   XAxis,

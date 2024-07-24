@@ -69,6 +69,7 @@ export const activateUser = catchAsyncError(async (req, res, next) => {
       name,
       email,
       password,
+      isVerified: true,
     });
 
     res.status(201).json({
@@ -173,7 +174,12 @@ export const socialAuth = catchAsyncError(async (req, res, next) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      const newUser = await User.create({ email, avatar, name });
+      const newUser = await User.create({
+        email,
+        avatar,
+        name,
+        isVerified: true,
+      });
       sendToken(newUser, 200, res);
     } else {
       sendToken(user, 200, res);

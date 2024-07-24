@@ -4,20 +4,13 @@ import Heading from "./@utils/Heading";
 import Header from "./@components/Header";
 import Hero from "./@components/Hero";
 import Courses from "./@components/course/Courses";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Reviews from "./@components/course/Reviews";
 import FAQ from "./@components/FAQ";
 import Footer from "./@components/Footer";
 
 const Page = () => {
   const [activeItem, setActiveItem] = useState(0);
-
-  useEffect(() => {
-    const storedActiveItem = localStorage.getItem("activeItem");
-    if (storedActiveItem !== null) {
-      setActiveItem(parseInt(storedActiveItem, 10));
-    }
-  }, []);
 
   return (
     <div>

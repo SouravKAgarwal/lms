@@ -52,11 +52,18 @@ const Reviews = () => {
   return (
     <div className="w-[90%] md:w-[80%] m-auto">
       <div className="w-full md:flex items-center gap-4">
-        <div className="md:w-[50%] w-full">
-          <Image src="/reviews.png" width={700} height={700} />
+        <div className="md:w-[50%] w-full mb-4">
+          <Image
+            src="/reviews.png"
+            className="h-full w-full"
+            width={2000}
+            height={2000}
+            priority
+            alt="people"
+          />
         </div>
         <div className="md:w-[50%] w-full">
-          <h3 className="text-4xl font-bold tracking-tight capitalize">
+          <h3 className="text-3xl md:text-4xl font-bold tracking-tight capitalize">
             Our Students Are <span className="text-gradient">Our Strength</span>{" "}
             <br />
             See what they say about us

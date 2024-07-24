@@ -1,22 +1,28 @@
-import { useEffect, useState } from "react";
+import CourseDetail from "@/app/@components/course/CourseDetail";
+import Footer from "@/app/@components/Footer";
+import Header from "@/app/@components/Header";
+import Loading from "@/app/@components/Loading";
 import Heading from "@/app/@utils/Heading";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlices";
 import { useGetCourseDetailsQuery } from "@/redux/features/courses/courseApi";
-import Loading from "../Loading";
-import Header from "../Header";
-import Footer from "../Footer";
-import CourseDetail from "./CourseDetail";
 import {
   useGetStripeKeyQuery,
   useOrderPaymentMutation,
 } from "@/redux/features/orders/orderApi";
 import { loadStripe } from "@stripe/stripe-js";
+import { useEffect, useState } from "react";
 
 const CourseDetailsPage = ({ id }) => {
   const { data, isLoading } = useGetCourseDetailsQuery(id);
+  const { data: userData, refetch } = useLoadUserQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [user, setUser] = useState();
   const { data: key } = useGetStripeKeyQuery();
   const [activeItem, setActiveItem] = useState(1);
 
   const [orderPayment, { data: paymentData }] = useOrderPaymentMutation();
+
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
@@ -25,17 +31,25 @@ const CourseDetailsPage = ({ id }) => {
       const publishableKey = key.stripePublishableKey;
       setStripePromise(loadStripe(publishableKey));
     }
-    if (data) {
+    if (data && user) {
       const amount = Math.round(data.course.price) * 100;
       orderPayment(amount);
+    } else {
+      refetch();
     }
-  }, [data, key]);
+  }, [data, key, user]);
 
   useEffect(() => {
     if (paymentData) {
       setClientSecret(paymentData.client_secret);
     }
   }, [paymentData]);
+
+  useEffect(() => {
+    if (userData) {
+      setUser(userData.user);
+    }
+  }, [userData]);
 
   return (
     <>
@@ -49,13 +63,15 @@ const CourseDetailsPage = ({ id }) => {
             keywords={data.course.tags}
           />
           <Header activeItem={activeItem} setActiveItem={setActiveItem} />
-          {stripePromise && (
-            <CourseDetail
-              data={data.course}
-              stripePromise={stripePromise}
-              clientSecret={clientSecret}
-            />
-          )}
+          <div className="mt-20">
+            {stripePromise && (
+              <CourseDetail
+                data={data?.course}
+                stripePromise={stripePromise}
+                clientSecret={clientSecret}
+              />
+            )}
+          </div>
           <Footer />
         </div>
       )}

@@ -83,6 +83,7 @@ const CourseInfo = ({ courseInfo, setCourseInfo, active, setActive }) => {
               setCourseInfo({ ...courseInfo, name: e.target.value })
             }
             placeholder="Course Name"
+            autoComplete="off"
             required
           />
         </Field>
@@ -99,6 +100,7 @@ const CourseInfo = ({ courseInfo, setCourseInfo, active, setActive }) => {
               setCourseInfo({ ...courseInfo, description: e.target.value })
             }
             placeholder="Course Description"
+            autoComplete="off"
             required
           />
         </Field>
@@ -116,6 +118,7 @@ const CourseInfo = ({ courseInfo, setCourseInfo, active, setActive }) => {
                 setCourseInfo({ ...courseInfo, price: e.target.value })
               }
               placeholder="$ 0"
+              autoComplete="off"
               required
             />
           </Field>
@@ -132,6 +135,7 @@ const CourseInfo = ({ courseInfo, setCourseInfo, active, setActive }) => {
                 setCourseInfo({ ...courseInfo, estimatedPrice: e.target.value })
               }
               placeholder="$ 0"
+              autoComplete="off"
               required
             />
           </Field>
@@ -201,6 +205,7 @@ const CourseInfo = ({ courseInfo, setCourseInfo, active, setActive }) => {
                 setCourseInfo({ ...courseInfo, tags: e.target.value })
               }
               placeholder="Course Tags"
+              autoComplete="off"
               required
             />
           </Field>
@@ -219,6 +224,7 @@ const CourseInfo = ({ courseInfo, setCourseInfo, active, setActive }) => {
                 setCourseInfo({ ...courseInfo, level: e.target.value })
               }
               placeholder="Beginner/Intermediate/Advanced"
+              autoComplete="off"
               required
             />
           </Field>

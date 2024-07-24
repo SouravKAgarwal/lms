@@ -43,7 +43,7 @@ const ProfileInfo = ({ user, avatar }) => {
       toast.success("Profile updated successfully");
     }
     if (error || editError) {
-      console.log(error);
+      toast.error(error.data.message || editError.data.message);
     }
   }, [isSuccess, editError, editSuccess, error, refetch]);
 
@@ -94,6 +94,7 @@ const ProfileInfo = ({ user, avatar }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="John Doe"
+                autoComplete="off"
               />
             </Field>
             <Field className="w-[100%] pt-4">

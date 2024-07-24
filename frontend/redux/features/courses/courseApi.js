@@ -54,6 +54,54 @@ export const courseApi = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    addQuestion: builder.mutation({
+      query: ({ question, courseId, contentId }) => ({
+        url: `courses/question`,
+        method: "PUT",
+        body: {
+          question,
+          courseId,
+          contentId,
+        },
+        credentials: "include",
+      }),
+    }),
+    addAnswer: builder.mutation({
+      query: ({ answer, courseId, contentId, questionId }) => ({
+        url: `courses/answer`,
+        method: "PUT",
+        body: {
+          answer,
+          courseId,
+          contentId,
+          questionId,
+        },
+        credentials: "include",
+      }),
+    }),
+    addReview: builder.mutation({
+      query: ({ id, review, rating }) => ({
+        url: `courses/review/${id}`,
+        method: "PUT",
+        body: {
+          review,
+          rating,
+        },
+        credentials: "include",
+      }),
+    }),
+    addReviewReply: builder.mutation({
+      query: ({ comment, courseId, reviewId }) => ({
+        url: `courses/review/reply`,
+        method: "PUT",
+        body: {
+          comment,
+          courseId,
+          reviewId,
+        },
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -65,4 +113,8 @@ export const {
   useGetUserCoursesQuery,
   useGetCourseDetailsQuery,
   useGetCourseContentQuery,
+  useAddQuestionMutation,
+  useAddAnswerMutation,
+  useAddReviewMutation,
+  useAddReviewReplyMutation,
 } = courseApi;

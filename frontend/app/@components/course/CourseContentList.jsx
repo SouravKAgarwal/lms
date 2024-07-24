@@ -21,7 +21,7 @@ const CourseContentList = ({ data, activeVideo, setActiveVideo, isDemo }) => {
   return (
     <div
       className={`mt-4 w-full ${
-        !isDemo && "ml-[-30px] min-h-screen sticky top-24 left-0 z-30"
+        !isDemo && "ml-[-30px] sticky top-24 left-0 z-30"
       }`}
     >
       {videoSections.map((section, index) => {
@@ -43,14 +43,16 @@ const CourseContentList = ({ data, activeVideo, setActiveVideo, isDemo }) => {
 
         return (
           <div
-            className={`${
-              isDemo &&
-              "border-b dark:border-[#ffffff8e] border-[#00000034] py-2"
+            className={`py-2 ${
+              !isDemo && "border-b dark:border-[#ffffff8e] border-[#00000034]"
             }`}
             key={section}
           >
             <div className="w-full flex">
-              <div className="w-full flex justify-between items-center">
+              <div
+                className="w-full flex justify-between items-center cursor-pointer"
+                onClick={() => toggleSection(section)}
+              >
                 <h2 className="text-base font-medium">{section}</h2>
                 <button
                   className="mr-4 cursor-pointer"
@@ -80,15 +82,17 @@ const CourseContentList = ({ data, activeVideo, setActiveVideo, isDemo }) => {
                   return (
                     <div
                       className={`w-full ${
-                        videoIndex === activeVideo ? "bg-slate-800" : ""
+                        videoIndex === activeVideo
+                          ? "bg-gray-300 dark:bg-slate-800 rounded"
+                          : ""
                       } cursor-pointer transition-all p-2`}
                       key={item._id}
                       onClick={() =>
                         isDemo ? null : setActiveVideo(videoIndex)
                       }
                     >
-                      <div className="flex items-start">
-                        <div>
+                      <div className="flex items-center">
+                        <div className="mt-1">
                           <MdOutlineOndemandVideo
                             size={25}
                             className="mr-2"

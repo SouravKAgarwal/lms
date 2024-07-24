@@ -151,6 +151,7 @@ const CourseContent = ({
                             : "min-w-fit"
                         }`}
                         type="text"
+                        autoComplete="off"
                         value={item.videoSection}
                         onChange={(e) =>
                           handleInputChange(
@@ -207,6 +208,7 @@ const CourseContent = ({
                       <Input
                         className="mt-2 block w-full rounded-lg border dark:border-white/50 bg-white/5 py-1.5 px-3 text-sm/6 text-black dark:text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 dark:data-[focus]:outline-white/25 data-[focus]:outline-black/25"
                         type="text"
+                        autoComplete="off"
                         name="title"
                         placeholder="Project Plan"
                         value={item.title}
@@ -222,6 +224,7 @@ const CourseContent = ({
                       <Input
                         className="mt-2 block w-full rounded-lg border dark:border-white/50 bg-white/5 py-1.5 px-3 text-sm/6 text-black dark:text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 dark:data-[focus]:outline-white/25 data-[focus]:outline-black/25"
                         type="text"
+                        autoComplete="off"
                         name="videoUrl"
                         placeholder="https://www.video.com"
                         value={item.videoUrl}
@@ -238,6 +241,7 @@ const CourseContent = ({
                         className="mt-2 block w-full rounded-lg border dark:border-white/50 bg-white/5 py-1.5 px-3 text-sm/6 text-black dark:text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 dark:data-[focus]:outline-white/25 data-[focus]:outline-black/25"
                         type="number"
                         name="videoLength"
+                        autoComplete="off"
                         placeholder="0"
                         value={item.videoLength}
                         onChange={(e) =>
@@ -256,6 +260,7 @@ const CourseContent = ({
                       <Textarea
                         className="mt-2 block w-full resize-none rounded-lg border dark:border-white/50 bg-white/5 py-1.5 px-3 text-sm/6 text-black dark:text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 dark:data-[focus]:outline-white/25 data-[focus]:outline-black/25"
                         rows={3}
+                        autoComplete="off"
                         id="description"
                         value={item.description}
                         onChange={(e) =>
@@ -290,6 +295,7 @@ const CourseContent = ({
                         <Input
                           className="mt-2 block w-full rounded-lg border dark:border-white/50 bg-white/5 py-1.5 px-3 text-sm/6 text-black dark:text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 dark:data-[focus]:outline-white/25 data-[focus]:outline-black/25"
                           type="text"
+                          autoComplete="off"
                           placeholder="Source Code ...."
                           value={link.title}
                           onChange={(e) =>
@@ -312,6 +318,7 @@ const CourseContent = ({
                         />
                         <Input
                           className="mt-2 block w-full rounded-lg border dark:border-white/50 bg-white/5 py-1.5 px-3 text-sm/6 text-black dark:text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 dark:data-[focus]:outline-white/25 data-[focus]:outline-black/25"
+                          autoComplete="off"
                           type="text"
                           placeholder="Source URL ...."
                           value={link.url}

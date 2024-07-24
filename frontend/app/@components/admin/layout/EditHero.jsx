@@ -96,6 +96,7 @@ const EditHero = () => {
                 name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                autoComplete="off"
                 rows={3}
               />
               <Textarea
@@ -104,6 +105,7 @@ const EditHero = () => {
                 value={subTitle}
                 onChange={(e) => setSubTitle(e.target.value)}
                 rows={4}
+                autoComplete="off"
               />
               <div className="w-full relative mt-4 flex gap-x-6">
                 <input

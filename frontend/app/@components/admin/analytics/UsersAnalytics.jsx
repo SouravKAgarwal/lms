@@ -1,4 +1,4 @@
-import { useGetUsersAnalyticsQuery } from "../../../../redux/analytics/analyticsApi";
+import { useGetUsersAnalyticsQuery } from "../../../../redux/features/analytics/analyticsApi";
 import {
   ResponsiveContainer,
   XAxis,
