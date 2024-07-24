@@ -24,9 +24,10 @@ const CourseDetailsPage = ({ id }) => {
   const [orderPayment, { data: paymentData }] = useOrderPaymentMutation();
 
   const [data,setData] = useState();
-
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
+
+  console.log(data);
 
   useEffect(() => {
     if (key) {
