@@ -13,7 +13,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
 
 const CourseDetailsPage = ({ id }) => {
-  const { data: courseData, isLoading } = useGetCourseDetailsQuery(id);
+  const { data, isLoading } = useGetCourseDetailsQuery(id);
   const { data: userData, refetch } = useLoadUserQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -23,15 +23,9 @@ const CourseDetailsPage = ({ id }) => {
 
   const [orderPayment, { data: paymentData }] = useOrderPaymentMutation();
 
-  const [data,setData] = useState();
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
-  useEffect(() => {
-    if(courseData){
-      setData(courseData.course);
-    }
-  },[courseData])
 
   useEffect(() => {
     if (key) {
@@ -39,7 +33,7 @@ const CourseDetailsPage = ({ id }) => {
       setStripePromise(loadStripe(publishableKey));
     }
     if (data && user) {
-      const amount = Math.round(data.price) * 100;
+      const amount = Math.round(data.course.price) * 100;
       orderPayment(amount);
     } else {
       refetch();
@@ -58,7 +52,7 @@ const CourseDetailsPage = ({ id }) => {
     }
   }, [userData]);
 
-  console.log(data,courseData);
+  console.log(data);
 
   return (
     <>
@@ -67,15 +61,15 @@ const CourseDetailsPage = ({ id }) => {
       ) : (
         <div>
           <Heading
-            title={`${data.name} - ELearning`}
+            title={`${data.course.name} - ELearning`}
             description="Platform for learning new technologies and programming."
-            keywords={data.tags}
+            keywords={data.course.tags}
           />
           <Header activeItem={activeItem} setActiveItem={setActiveItem} />
           <div className="mt-20">
             {stripePromise && (
               <CourseDetail
-                data={data}
+                data={data?.course}
                 stripePromise={stripePromise}
                 clientSecret={clientSecret}
               />
