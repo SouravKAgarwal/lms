@@ -45,7 +45,7 @@ const Profile = ({ user }) => {
   }, [data]);
 
   return (
-    <div className="w-[85%] flex mx-auto mt-16">
+    <div className="w-[85%] flex mx-auto my-16">
       <div
         className={`w-16 md:w-[310px] h-[450px] bg-white dark:bg-slate-900 bg-opacity-90 border border-[#0000001d] dark:border-[#ffffff1d] rounded-md shadow-sm my-20 sticky ${
           scroll ? "top-28" : "top-8"

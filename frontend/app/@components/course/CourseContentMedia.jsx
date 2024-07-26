@@ -74,6 +74,7 @@ const CourseContentMedia = ({
   const [reviewId, setReviewId] = useState("");
   const [comment, setComment] = useState("");
   const [reviewReply, setReviewReply] = useState(false);
+  const [replyActive, setReplyActive] = useState(false);
 
   const reviewExists =
     course && course?.reviews?.find((item) => item.user._id === user._id);
@@ -110,6 +111,7 @@ const CourseContentMedia = ({
   useEffect(() => {
     if (isSuccess) {
       setQuestion("");
+      setQuestionId("");
       refetch();
       socketId.emit("notification", {
         userId: user._id,
@@ -120,6 +122,7 @@ const CourseContentMedia = ({
     }
     if (addAnswerSuccess) {
       setAnswer("");
+      setReplyActive(false);
       refetch();
       if (user.role !== "admin") {
         socketId.emit("notification", {
@@ -133,6 +136,7 @@ const CourseContentMedia = ({
     if (reviewSuccess) {
       setReview("");
       setRating("");
+      setReviewId("");
       refetch();
       socketId.emit("notification", {
         userId: user._id,
@@ -144,6 +148,7 @@ const CourseContentMedia = ({
     if (commentSuccess) {
       setComment("");
       setReviewId("");
+      setReviewReply(false);
       refetch();
       toast.success("Replied successfully!");
     }
@@ -279,6 +284,8 @@ const CourseContentMedia = ({
               questionId={questionId}
               setQuestionId={setQuestionId}
               isLoading={answerCreateLoading}
+              replyActive={replyActive}
+              setReplyActive={setReplyActive}
             />
           </div>
         </>
@@ -466,6 +473,8 @@ const CommentReply = ({
   questionId,
   setQuestionId,
   isLoading,
+  replyActive,
+  setReplyActive,
 }) => {
   return (
     <>
@@ -482,6 +491,8 @@ const CommentReply = ({
             setQuestionId={setQuestionId}
             handleAnswer={handleAnswer}
             isLoading={isLoading}
+            setReplyActive={setReplyActive}
+            replyActive={replyActive}
           />
         ))}
       </div>
@@ -497,8 +508,9 @@ const CommentItem = ({
   setAnswer,
   handleAnswer,
   isLoading,
+  setReplyActive,
+  replyActive,
 }) => {
-  const [replyActive, setReplyActive] = useState(false);
   return (
     <>
       <div className="my-4">
