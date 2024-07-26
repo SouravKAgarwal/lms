@@ -34,7 +34,7 @@ const FAQ = () => {
                   className="flex items-start w-full justify-between text-left focus:outline-none dark:text-white text-black"
                   onClick={() => toggleQuestion(q._id)}
                 >
-                  <span className="font-Poppins text-black dark:text-white">
+                  <span className="font-Poppins font-medium text-black dark:text-white">
                     {q.question}
                   </span>
                   <span className="ml-6 flex shrink-0">
@@ -48,7 +48,7 @@ const FAQ = () => {
               </dt>
               {activeQuestion === q._id && (
                 <dd className="mt-2 pr-12">
-                  <p className="text-base font-Josefin text-black dark:text-white">
+                  <p className="text-base font-Poppins text-black dark:text-white">
                     {q.answer}
                   </p>
                 </dd>

@@ -6,6 +6,7 @@ import Profile from "../@components/profile/Profile";
 import { useSelector } from "react-redux";
 import Header from "../@components/Header";
 import { useState } from "react";
+import Footer from "../@components/Footer";
 
 const Page = () => {
   const { user } = useSelector((state) => state.auth);
@@ -21,6 +22,7 @@ const Page = () => {
         />
         <Header activeItem={activeItem} setActiveItem={setActiveItem} />
         <Profile user={user} />
+        <Footer />
       </Protected>
     </div>
   );

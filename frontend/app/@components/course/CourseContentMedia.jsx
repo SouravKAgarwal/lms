@@ -118,11 +118,11 @@ const CourseContentMedia = ({
         title: "New Question",
         message: `You have a new question in ${data[activeVideo].title}`,
       });
-      toast.success("Question added successfully!");
     }
     if (addAnswerSuccess) {
-      setAnswer("");
       setReplyActive(false);
+      setAnswer("");
+      setQuestionId("");
       refetch();
       if (user.role !== "admin") {
         socketId.emit("notification", {
@@ -131,7 +131,6 @@ const CourseContentMedia = ({
           message: `Question replied for ${data[activeVideo].title}`,
         });
       }
-      toast.success("Replied successfully!");
     }
     if (reviewSuccess) {
       setReview("");
@@ -223,7 +222,7 @@ const CourseContentMedia = ({
         )}
       </div>
       {activeBar === 0 && (
-        <p className="whitespace-pre-line my-3 mb-10 font-Josefin">
+        <p className="whitespace-pre-line my-3 mb-10 text-sm font-medium font-Poppins">
           {data[activeVideo].description}
         </p>
       )}
@@ -262,6 +261,7 @@ const CourseContentMedia = ({
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder="Write your question..."
+                autoComplete="off"
               />
               <button
                 type="submit"
@@ -335,6 +335,7 @@ const CourseContentMedia = ({
                       value={review}
                       onChange={(e) => setReview(e.target.value)}
                       placeholder="Write your comment..."
+                      autoComplete="off"
                     />
                   </div>
                 </div>
@@ -378,7 +379,7 @@ const CourseContentMedia = ({
                         </small>
                       </div>
                     </div>
-                    {user.role === "admin" && (
+                    {user.role === "admin" ? (
                       <div className="w-full flex mt-2">
                         <span
                           className="pl-14 flex text-[#00000082] dark:text-[#ffffff83] cursor-pointer mr-2"
@@ -396,7 +397,43 @@ const CourseContentMedia = ({
                           </span>
                         </span>
                       </div>
+                    ) : (
+                      <>
+                        {item.commentReplies.map((i, index) => (
+                          <div className="w-full flex ml-12 my-5" key={index}>
+                            <Image
+                              src={
+                                i.user.avatar
+                                  ? i.user.avatar.url
+                                  : "/profile.png"
+                              }
+                              className="w-[50px] h-[50px] rounded-full bg-black dark:bg-white"
+                              alt={i.user.name}
+                              width={1000}
+                              height={1000}
+                            />
+                            <div className="pl-2">
+                              <div className="flex items-center gap-2">
+                                <h5 className="font-Poppins text-sm font-medium">
+                                  {i.user.name}
+                                </h5>
+                                {i.user.role === "admin" && (
+                                  <VscVerifiedFilled
+                                    className="text-blue-400"
+                                    size={20}
+                                  />
+                                )}
+                              </div>
+                              <p>{i.comment}</p>
+                              <small className="text-[#000000d1] dark:text-[#ffffff83]">
+                                {moment(i.createdAt).fromNow()}
+                              </small>
+                            </div>
+                          </div>
+                        ))}
+                      </>
                     )}
+
                     {reviewReply && item._id === reviewId && (
                       <>
                         <div className="w-full flex relative mt-4">
@@ -407,6 +444,7 @@ const CourseContentMedia = ({
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             placeholder="Reply..."
+                            autoComplete="off"
                           />
                           <button
                             type="submit"
@@ -525,9 +563,14 @@ const CommentItem = ({
             />
           </div>
           <div className="pl-3">
-            <h5 className="font-Poppins text-sm font-medium">
-              {item.user.name}
-            </h5>
+            <div className="flex items-center gap-2">
+              <h5 className="font-Poppins text-sm font-medium">
+                {item.user.name}
+              </h5>
+              {item.user.role === "admin" && (
+                <VscVerifiedFilled className="text-blue-400" size={20} />
+              )}
+            </div>
             <p className="text-sm">{item.question}</p>
             <small className="text-[#00000082] dark:text-[#ffffff83]">
               {moment(item.createdAt).fromNow()}
@@ -562,10 +605,11 @@ const CommentItem = ({
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
                   placeholder="Reply..."
+                  autoComplete="off"
                 />
                 <button
                   type="submit"
-                  className="absolute right-0 bottom-0 py-2 px-2 rounded-r bg-indigo-600 text-white"
+                  className="absolute right-0 bottom-0 py-2 px-2 rounded-tr bg-indigo-600 text-white"
                   onClick={handleAnswer}
                   disabled={answer === "" || isLoading}
                 >
@@ -574,7 +618,7 @@ const CommentItem = ({
               </div>
             </>
             {item.questionReplies.map((item, index) => (
-              <div className="w-full flex md:ml-12 my-5" key={index}>
+              <div className="w-full flex ml-12 my-5" key={index}>
                 <div>
                   <Image
                     src={

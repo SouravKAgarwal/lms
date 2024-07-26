@@ -6,6 +6,7 @@ import CourseContentMedia from "./CourseContentMedia";
 import Header from "../Header";
 import CourseContentList from "./CourseContentList";
 import { useSearchParams } from "next/navigation";
+import Footer from "../Footer";
 
 const CourseContent = ({ id, user }) => {
   const {
@@ -49,6 +50,7 @@ const CourseContent = ({ id, user }) => {
               />
             </div>
           </div>
+          <Footer />
         </>
       )}
     </>
